@@ -9,12 +9,13 @@ import reactionRouter from './routes/reactionRoute.js';
 import dotenv from 'dotenv'; // Import dotenv for environment variables
 import standardizedResponse from './middlewares/standardResponse.js'; // Import custom response middleware
 // import { MongoMemoryServer } from 'mongodb-memory-server';
+import './utils/logger.js';
 import cors from 'cors';
 
 dotenv.config(); // Load environment variables
 
 const app = express(); // Create an Express application
-const port = process.env.BACKEND_PORT || 3000; // Define port
+const port = process.env.BACKEND_PORT || 6501; // Define port
 
 // CORS - https://www.npmjs.com/package/cors
 const corsOptionsDev = {
@@ -61,7 +62,8 @@ mongoose
 // Start server
 if (process.env.NODE_ENV !== 'test') { // needed to pass tests
   app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    //console.log(`Server is running on http://localhost:${port}`);
+    logger.info(`Server (Publications) is running on http://localhost:${port}`);
   });
 };
 

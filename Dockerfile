@@ -1,14 +1,14 @@
 # Backend
-FROM node:22-alpine3.18
+FROM node:18
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 
 # Set environment variable for the port
-# ENV BACKEND_PORT=3000
+ENV BACKEND_PORT=3000
 
 # Expose the port
-# EXPOSE $PORT 8080
+EXPOSE $PORT
 
 CMD ["npm", "run", "start"]
