@@ -7,11 +7,11 @@ import {
 
 
 const router = express.Router();
-router.get('/testPublication', getAllTestPublications);
-router.get('/publications/:id', getPublicationByID);
-router.get('/publications/user/:user', getAllPublicationsByUser);
-router.post('/publications', createPublication);
-router.put('/publications/:id', updatePublication);
-router.delete('/publications/:id', deletePublication);
+router.get('/v1/testPublication', getAllTestPublications);
+router.get('/v1/publications/:id', getPublicationByID);
+router.get('/v1/publications/user/:user', getAllPublicationsByUser);
+router.post('/v1/publications', createPublication);
+router.put('/v1/publications/:id', updatePublication);
+router.delete('/v1/publications/:id', deletePublication);
 
 export default router;  

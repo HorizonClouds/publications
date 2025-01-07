@@ -8,7 +8,7 @@ import commentRouter from './routes/commentRoute.js';
 import reactionRouter from './routes/reactionRoute.js';
 import dotenv from 'dotenv'; // Import dotenv for environment variables
 import standardizedResponse from './middlewares/standardResponse.js'; // Import custom response middleware
-// import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import './utils/logger.js';
 import cors from 'cors';
 
@@ -25,8 +25,8 @@ const corsOptionsDev = {
 
 
 // Middlewares
-if (process.env.NODE_ENV === 'development') app.use(cors(corsOptionsDev));
-//app.use(cors());
+// if (process.env.NODE_ENV === 'development') app.use(cors(corsOptionsDev));
+app.use(cors());
 app.use(express.json()); // Parse JSON bodies
 app.use(standardizedResponse); // Use custom response middleware
 
@@ -41,22 +41,24 @@ swaggerSetup(app);
 
 // Connect to MongoDB
 let mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/microservice';
+
+let mongod;
 if (process.env.NODE_ENV === 'test') {
-  /* const mongod = new MongoMemoryServer(); // Fake MongoDB for testing
+  mongod = new MongoMemoryServer(); // Fake MongoDB for testing
   await mongod.start();
   mongoURI = mongod.getUri();
-  console.log("MongoMemoryServer", mongoURI); */
+  console.log("MongoMemoryServer", mongoURI);
 
-  mongoURI = process.env.TEST_MONGODB_URI;
+  // mongoURI = process.env.TEST_MONGODB_URI;
 }
 
 mongoose
   .connect(mongoURI)
   .then(() => {
-    console.log('Connected to MongoDB\n');
+    logger.info('Connected to MongoDB\n');
   })
   .catch((error) => {
-    console.error('Error connecting to MongoDB:', error.message);
+    logger.info('Error connecting to MongoDB:', error.message);
   });
 
 // Start server
@@ -66,5 +68,7 @@ if (process.env.NODE_ENV !== 'test') { // needed to pass tests
     logger.info(`Server (Publications) is running on http://localhost:${port}`);
   });
 };
+
+export { mongod }; // Export mongod to close it with each test iteration !!!
 
 export default app; // Export the Express application

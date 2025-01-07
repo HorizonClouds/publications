@@ -6,72 +6,19 @@ info:
 servers:
   - url: /api
 paths:
-  /testcomments:
+  /v1/testPublication:
     get:
-      summary: Get all test comments
+      summary: Get every publication in the database for testing purposes
       tags:
-        - Comments
+        - Publications
       responses:
         '200':
           description: List of test comments
-  /comments/{id}:
+  /v1/publication/user/{user}:
     get:
-      summary: Get a comment by ID
+      summary: Get all publications by a specific user
       tags:
-        - Comments
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the comment
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Comment data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Comment'
-    put:
-      summary: Update a comment by ID
-      tags:
-        - Comments
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the comment
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Comment'
-      responses:
-        '200':
-          description: Updated comment
-    delete:
-      summary: Delete a comment by ID
-      tags:
-        - Comments
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the comment
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Successfully deleted
-  /comments/user/{user}:
-    get:
-      summary: Get all comments by a specific user
-      tags:
-        - Comments
+        - Publications
       parameters:
         - name: user
           in: path
@@ -87,57 +34,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Comment'
-  /comments/publication/{publication}:
-    get:
-      summary: Get all comments by a specific publication
-      tags:
-        - Comments
-      parameters:
-        - name: publication
-          in: path
-          required: true
-          description: ID of the publication
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List of comments
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
-  /comments:
-    post:
-      summary: Create a new comment
-      tags:
-        - Comments
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Comment'
-      responses:
-        '201':
-          description: Created comment
-  /publications:
-    post:
-      summary: Create a new publication
-      tags:
-        - Publications
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Publication'
-      responses:
-        '201':
-          description: Created publication
-  /publications/{id}:
+                  $ref: '#/components/schemas/Publication'
+  /v1/publications/{id}:
     get:
       summary: Get a publication by ID
       tags:
@@ -190,15 +88,146 @@ paths:
       responses:
         '204':
           description: Successfully deleted
-  /testReaction:
+  /v1/publications:
+    post:
+      summary: Create a new publication
+      tags:
+        - Publications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publication'
+      responses:
+        '201':
+          description: Created publication
+  /v1/testcomments:
     get:
-      summary: Get all test reactions
+      summary: Get every comment in the database for testing purposes
+      tags:
+        - Comments
+      responses:
+        '200':
+          description: List of test comments
+  /v1/comments/{id}:
+    get:
+      summary: Get a comment by ID
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+    put:
+      summary: Update a comment by ID
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Updated comment
+    delete:
+      summary: Delete a comment by ID
+      tags:
+        - Comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted
+  /v1/comments/user/{user}:
+    get:
+      summary: Get all comments by a specific user
+      tags:
+        - Comments
+      parameters:
+        - name: user
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+  /v1/comments/publication/{publication}:
+    get:
+      summary: Get all comments by a specific publication
+      tags:
+        - Comments
+      parameters:
+        - name: publication
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+  /v1/comments:
+    post:
+      summary: Create a new comment
+      tags:
+        - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: Created comment
+  /v1/testReaction:
+    get:
+      summary: Get every reaction in the database for testing purposes
       tags:
         - Reactions
       responses:
         '200':
           description: List of test reactions
-  /comments/{id}/reactions:
+  /v1/comments/{id}/reactions:
     get:
       summary: Get all reactions for a specific comment
       tags:
@@ -219,7 +248,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
-  /publications/{id}/reactions:
+  /v1/publications/{id}/reactions:
     get:
       summary: Get all reactions for a specific publication
       tags:
@@ -240,7 +269,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
-  /user/{id}/unseen:
+  /v1/user/{id}/unseen:
     get:
       summary: Get unseen reactions for a user
       tags:
@@ -261,7 +290,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reaction'
-  /comments/{id}/reaction:
+  /v1/comments/{id}/reaction:
     post:
       summary: Add a reaction to a comment
       tags:
@@ -282,7 +311,7 @@ paths:
       responses:
         '201':
           description: Reaction added
-  /publications/{id}/reaction:
+  /v1/publications/{id}/reaction:
     post:
       summary: Add a reaction to a publication
       tags:
@@ -303,7 +332,7 @@ paths:
       responses:
         '201':
           description: Reaction added
-  /read/reaction/{id}:
+  /v1/read/reaction/{id}:
     put:
       summary: Mark a reaction as read
       tags:

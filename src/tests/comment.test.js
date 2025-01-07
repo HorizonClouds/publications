@@ -1,9 +1,11 @@
-import { test, after, beforeEach, describe } from 'node:test';
+import { test, after, beforeEach, describe, before } from 'node:test';
 import assert from 'node:assert';
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../server.js';
 import Comment from '../models/commentModel.js'; // IMPORTANTE: ESQUEMA DE COMMENT
+import { mongod } from '../server.js';
+
 
 // Envuelve la app (Express) en la función supertest generando un "superagente"
 const api = supertest(app);
@@ -38,7 +40,7 @@ const initialComments = [
 //       2) Rellenar la ruta test para obtener todos los comentarios en nuestra DB
 // Función auxiliar para devolver todas las publicaciones
 const commentsInDB = async () => {
-    const response = await api.get('/api/testcomments');
+    const response = await api.get('/api/v1/testcomments');
     return response.body.data;
     //NOTA: Cuando hacemos un api.get, obtenemos un objeto (también JSON)
     //      Esta "respuesta" tiene un campo "body" : cuerpo del mensaje
@@ -66,7 +68,7 @@ describe('Nombre del paquete de tests', () => {
         // Este es muy sencillo, fíjate cómo está hecho en los otros
         // TODO: Obtener los comentarios de la ruta de test
         await api
-            .get('/api/testcomments')
+            .get('/api/v1/testcomments')
             .expect(200)
             .expect('Content-Type', /application\/json/)
     });
@@ -91,7 +93,7 @@ describe('Nombre del paquete de tests', () => {
             //      2.3 ) rellenar código esperado
 
             await api
-                .post('/api/comments')
+                .post('/api/v1/comments')
                 .send(newComment)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -137,7 +139,7 @@ describe('Nombre del paquete de tests', () => {
                 const commentToDelete = commentsAtStart[0];
             
                 await api
-                    .delete(`/api/comments/${commentToDelete.id}`)
+                    .delete(`/api/v1/comments/${commentToDelete.id}`)
                     .expect(204)
                 
                 const commentsAtEnd = await commentsInDB();
@@ -154,7 +156,10 @@ describe('Nombre del paquete de tests', () => {
 
 // Cierra la conexión DESPUÉS de ejecutar todos los test
 after(async () => {
-    await mongoose.connection.close();
+    if(mongoose.connection.readyState !== 0){ 
+        await mongoose.connection.close();
+    }
+    if(mongod) await mongod.stop();
 });
 
 

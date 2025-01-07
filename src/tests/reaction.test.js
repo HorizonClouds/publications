@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../server.js';
 import Reaction from '../models/reactionModel.js';
+import { mongod } from '../server.js';
 
 // Envuelve la app (Express) en la función supertest generando un "superagente"
 const api = supertest(app);
@@ -29,7 +30,7 @@ const comment = initialReactions[2].comentario;
 
 // Función auxiliar para devolver todas las reacciones
 const reactionsInDB = async () => {
-    const response = await api.get('/api/testReaction');
+    const response = await api.get('/api/v1/testReaction');
     return response.body.data;
 };
 
@@ -42,7 +43,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
 
     test('reactions are returned as JSON', async () => {
         await api
-            .get('/api/testReaction')
+            .get('/api/v1/testReaction')
             .expect(200)
             .expect('Content-Type', /application\/json/);
     });
@@ -62,21 +63,21 @@ describe('Reaction tests - with refreshed data for each test', () => {
         });
 
         test(`publication with id ${publication} has ${initialReactions.filter(r => r.publicacion === publication).length} reactions`, async () => {
-            const response = await api.get(`/api/publications/${publication}/reactions`);
+            const response = await api.get(`/api/v1/publications/${publication}/reactions`);
             const publications = response.body.data;
 
             assert.strictEqual(publications.length, initialReactions.filter(r => r.publicacion === publication).length);
         });
 
         test(`comment with id ${comment} has ${initialReactions.filter(r => r.comentario === comment).length} reactions`, async () => {
-            const response = await api.get(`/api/comments/${comment}/reactions`);
+            const response = await api.get(`/api/v1/comments/${comment}/reactions`);
             const comments = response.body.data;
             
             assert.strictEqual(comments.length, initialReactions.filter(r => r.comentario === comment).length);
         });
 
         test(`there are ${initialReactions.filter(r => !(r.visto) && r.usuario === user).length} unseen reactions for user ${user}`, async() => {
-            const response = await api.get(`/api/user/${user}/unseen`);
+            const response = await api.get(`/api/v1/user/${user}/unseen`);
             const unseenReactions = response.body.data;
 
             assert.strictEqual(unseenReactions.length, initialReactions.filter(r => !(r.visto) && r.usuario === user).length);
@@ -94,7 +95,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
             };
 
             await api
-                .post(`/api/comments/${comment}/reaction`)
+                .post(`/api/v1/comments/${comment}/reaction`)
                 .send(newReaction)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -103,7 +104,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
 
             assert.strictEqual(reactions.length, initialReactions.length + 1);
 
-            const response = await api.get(`/api/user/${newUser}/unseen`);
+            const response = await api.get(`/api/v1/user/${newUser}/unseen`);
             const reactionsByNewUser = response.body.data;
 
             assert.strictEqual(reactionsByNewUser.length, 1);
@@ -122,7 +123,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
             };
 
             await api
-                .post(`/api/publications/${comment}/reaction`)
+                .post(`/api/v1/publications/${comment}/reaction`)
                 .send(newReaction)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -131,7 +132,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
 
             assert.strictEqual(reactions.length, initialReactions.length + 1);
 
-            const response = await api.get(`/api/user/${newUser}/unseen`);
+            const response = await api.get(`/api/v1/user/${newUser}/unseen`);
             const reactionsByNewUser = response.body.data;
 
             assert.strictEqual(reactionsByNewUser.length, 1);
@@ -150,7 +151,7 @@ describe('Reaction tests - with refreshed data for each test', () => {
             };
 
             await api
-                .post(`/api/publications/${comment}/reaction`)
+                .post(`/api/v1/publications/${comment}/reaction`)
                 .send(newReaction)
                 .expect(400);
             
@@ -164,8 +165,8 @@ describe('Reaction tests - with refreshed data for each test', () => {
             const sameReaction = {...initialReactions[0]};
 
             const route = sameReaction.publicacion
-                ? `/api/publications/${sameReaction.publicacion}/reaction`
-                : `/api/comment/${sameReaction.comentario}/reaction`;
+                ? `/api/v1/publications/${sameReaction.publicacion}/reaction`
+                : `/api/v1/comment/${sameReaction.comentario}/reaction`;
 
             await api
                 .post(route)
@@ -183,17 +184,17 @@ describe('Reaction tests - with refreshed data for each test', () => {
         test(`user ${initialReactions[0].usuario} can set unread reactions as read`, async () => {
             const user = initialReactions[0].usuario;
 
-            const response = await api.get(`/api/user/${user}/unseen`);
+            const response = await api.get(`/api/v1/user/${user}/unseen`);
             const unreadReactions = response.body.data;
 
             unreadReactions.forEach( async (r) => {
                 await api
-                    .put(`/api/read/reaction/${r.id}`)
+                    .put(`/api/v1/read/reaction/${r.id}`)
                     .send({"visto" : true})
                     .then(r => assert.strictEqual(r.body.data.visto, true));
             });
 
-            const newResponse = await api.get(`/api/user/${user}/unseen`);
+            const newResponse = await api.get(`/api/v1/user/${user}/unseen`);
             const unreadReactionsAtEnd = newResponse.body.data;
 
             assert.strictEqual(unreadReactionsAtEnd.length, 0);
@@ -203,6 +204,10 @@ describe('Reaction tests - with refreshed data for each test', () => {
 
 });
 
+// Cierra la conexión DESPUÉS de ejecutar todos los test
 after(async () => {
-    await mongoose.connection.close();
+    if(mongoose.connection.readyState !== 0){ 
+        await mongoose.connection.close();
+    }
+    if(mongod) await mongod.stop();
 });

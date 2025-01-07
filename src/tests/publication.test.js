@@ -1,13 +1,13 @@
-import { test, after, beforeEach, describe } from 'node:test';
+import { test, after, beforeEach, describe, before } from 'node:test';
 import assert from 'node:assert';
 import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../server.js';
 import Publication from '../models/publicationModel.js';
+import { mongod } from '../server.js';
 
 // Envuelve la app (Express) en la función supertest generando un "superagente"
 const api = supertest(app);
-
 
 const initialPublications = [
     {
@@ -41,9 +41,10 @@ const usuario = initialPublications[0].usuario;
 
 // Función auxiliar para devolver todas las publicaciones
 const publicationsInDB = async () => {
-    const response = await api.get('/api/testPublication');
+    const response = await api.get('/api/v1/testPublication');
     return response.body.data;
 };
+
 
 
 describe('Publication tests - with refreshed data for each test', () => {
@@ -55,7 +56,7 @@ describe('Publication tests - with refreshed data for each test', () => {
 
     test('publications are returned as JSON', async ()=> {
         await api
-            .get('/api/testPublication')
+            .get('/api/v1/testPublication')
             .expect(200)
             .expect('Content-Type', /application\/json/)
     });
@@ -76,7 +77,7 @@ describe('Publication tests - with refreshed data for each test', () => {
         
         test(`the user ${usuario} has ${initialPublications.filter((p) => p.usuario === usuario).length} publications`, async () => {
             
-            const response = await api.get('/api/publications/user/' + usuario);
+            const response = await api.get('/api/v1/publications/user/' + usuario);
             const userPublications = response.body.data;
         
             const contents = userPublications.map( p => p.contenido);
@@ -102,7 +103,7 @@ describe('Publication tests - with refreshed data for each test', () => {
             }
         
             await api
-                .post('/api/publications')
+                .post('/api/v1/publications')
                 .send(newPublication)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -130,7 +131,7 @@ describe('Publication tests - with refreshed data for each test', () => {
             }
         
             await api
-                .post('/api/publications')
+                .post('/api/v1/publications')
                 .send(newPublication)
                 .expect(201)
                 .expect('Content-Type', /application\/json/);
@@ -151,7 +152,7 @@ describe('Publication tests - with refreshed data for each test', () => {
             const generatedId = thisPublication[0].id;
         
             await api
-                .get('/api/publications/'+ generatedId)
+                .get('/api/v1/publications/'+ generatedId)
                 .expect(200)
                 .expect('Content-Type', /application\/json/);
         });
@@ -161,7 +162,7 @@ describe('Publication tests - with refreshed data for each test', () => {
             const newPublication = {}
         
             await api
-                .post('/api/publications')
+                .post('/api/v1/publications')
                 .send(newPublication)
                 .expect(400)
         
@@ -178,7 +179,7 @@ describe('Publication tests - with refreshed data for each test', () => {
             const publicationToDelete = publicationsAtStart[0];
         
             await api
-                .delete(`/api/publications/${publicationToDelete.id}`)
+                .delete(`/api/v1/publications/${publicationToDelete.id}`)
                 .expect(204)
             
             const publicationsAtEnd = await publicationsInDB();
@@ -197,5 +198,8 @@ describe('Publication tests - with refreshed data for each test', () => {
 
 // Cierra la conexión DESPUÉS de ejecutar todos los test
 after(async () => {
-    await mongoose.connection.close();
+    if(mongoose.connection.readyState !== 0){ 
+        await mongoose.connection.close();
+    }
+    if(mongod) await mongod.stop();
 });
