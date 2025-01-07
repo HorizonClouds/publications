@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 
 # Set environment variable for the port
-ENV BACKEND_PORT=3000
+ENV BACKEND_PORT=6401
 
 # Expose the port
 EXPOSE $PORT
