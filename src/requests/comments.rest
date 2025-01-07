@@ -1,0 +1,119 @@
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c50c537f00812fb9533", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": " ... a nosotros también nos gusto sobre todo La Alcazaba de Málaga"
+}
+
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c50c537f00812fb9533", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": " Hemos probado en los chiringuitos los espetos de sardina, la concha fina y los bolos"
+}
+
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c50c537f00812fb9533", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": " Tembién hay muchos tipos de vino, de los vinos dulces me gusta el moscatel"
+}
+
+
+
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c87c537f00812fb9535", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": "Las playas del Parque Natural del Cabo de Gata son espectaculares"
+}
+
+
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c8bc537f00812fb9537", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": "Nosotros también disfrutamos mucho de las pista de ski. El frío se pasa rápido"
+}
+
+
+###
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "publicacion_id": "67419c8bc537f00812fb9539", 
+    "usuario_id": "65b2aec262e19efa29bc3b1e",
+    "contenido_comentario": "Cuando nos enteramos de lo que eran las castañuelas nos quedamos sorprendidos, pero aún así, estaban muy buenas!"
+}
+
+###
+
+// -------------------------------------
+// GET - un comentarios por id - Las playas del Parque Natural del Cabo de Gata son espectaculares
+// -------------------------------------
+
+GET http://localhost:3000/api/comments/6741a611375eff67dadd581b
+
+
+###
+
+// -------------------------------------
+// GET - comentarios por usuario - OK
+// -------------------------------------
+
+GET http://localhost:3000/api/comments/user/65b2aec262e19efa29bc3b1e
+
+###
+
+// -------------------------------------
+// GET - comentarios por publicacion - OK
+// -------------------------------------
+
+GET http://localhost:3000/api/comments/publication/67419c50c537f00812fb9533
+
+
+// -------------------------------------
+// UPDATE - ok
+// -------------------------------------
+
+###
+
+PUT http://localhost:3000/api/comments/6741a611375eff67dadd581b
+Content-Type: application/json
+
+{
+     "contenido_comentario": " CAMBIADO "
+}
+
+
+
+// ------------------------------------
+// DELETE - OK
+// ------------------------------------
+
+### 
+
+DELETE http://localhost:3000/api/comments/6741b5343384ead24ef56fe7
+Content-Type: application/json

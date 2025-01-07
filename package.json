@@ -1,5 +1,5 @@
 {
-  "name": "simple-mern-microservice",
+  "name": "publications-microservice",
   "version": "0.0.0",
   "description": "Template",
   "type": "module",
@@ -12,34 +12,33 @@
     "dev": "nodemon -L",
     "start-mongodb": "docker run --name mongodb -d -p 27017:27017 -v mongo-data:/data/db mongo",
     "format": "prettier --write \"src/**/*.{js,cjs,mjs}\"",
-    "test": "cross-env NODE_ENV=test mocha 'src/test/**/*.js' --recursive --exit --timeout 10000"
+    "test": "cross-env NODE_ENV=test node --test",
+    "test_old": "cross-env NODE_ENV=test mocha 'src/test/**/*.js' --recursive --exit --timeout 10000"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HorizonClouds/simple-mern-microservice.git"
+    "url": "git+https://github.com/HorizonClouds/publications.git"
   },
-  "author": "Manuel Otero",
+  "author": "Antonio y Luis",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/HorizonClouds/simple-mern-microservice/issues"
+    "url": "https://github.com/HorizonClouds/publications/issues"
   },
-  "homepage": "https://github.com/HorizonClouds/simple-mern-microservice#readme",
+  "homepage": "https://github.com/HorizonClouds/publications#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",
-    "joi": "^17.13.3",
     "mongoose": "^8.8.0",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "chai": "^5.1.2",
-    "chai-http": "^5.1.1",
-    "mocha": "^10.8.2",
     "mongodb-memory-server": "^10.1.2",
     "nodemon": "^3.1.7",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "supertest": "^7.0.0"
   }
 }

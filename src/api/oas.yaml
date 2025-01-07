@@ -1,134 +1,47 @@
 openapi: 3.0.0
 info:
-  title: Example API
+  title: API Documentation
   version: 1.0.0
-  description: API documentation for Example microservice
+  description: API documentation for comments, publications, and reactions.
 servers:
-  - url: http://localhost:3000/api/v1
+  - url: /api
 paths:
-  /examples:
+  /testcomments:
     get:
-      summary: Get all examples
+      summary: Get all test comments
       tags:
-        - Example
+        - Comments
       responses:
         '200':
-          description: A list of examples
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Success!
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-    post:
-      summary: Create a new example
-      tags:
-        - Example
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewExample'
-      responses:
-        '201':
-          description: The created example
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Example created successfully
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-  /examples/{id}:
+          description: List of test comments
+  /comments/{id}:
     get:
-      summary: Get a specific example by ID
+      summary: Get a comment by ID
       tags:
-        - Example
+        - Comments
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
-          description: ID of the example to get
+          description: ID of the comment
           schema:
             type: string
       responses:
         '200':
-          description: The requested example
+          description: Comment data
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Success!
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-        '404':
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                $ref: '#/components/schemas/Comment'
     put:
-      summary: Update an existing example by ID
+      summary: Update a comment by ID
       tags:
-        - Example
+        - Comments
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
-          description: ID of the example to update
+          description: ID of the comment
           schema:
             type: string
       requestBody:
@@ -136,107 +49,367 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Example'
+              $ref: '#/components/schemas/Comment'
       responses:
         '200':
-          description: The updated example
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  message:
-                    type: string
-                    example: Example updated successfully
-                  data:
-                    $ref: '#/components/schemas/Example'
-                  appCode:
-                    type: string
-                    example: OK
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
-        '404':
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+          description: Updated comment
     delete:
-      summary: Delete an example by ID
+      summary: Delete a comment by ID
       tags:
-        - Example
+        - Comments
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
-          description: ID of the example to delete
+          description: ID of the comment
           schema:
             type: string
       responses:
         '204':
           description: Successfully deleted
-        '404':
-          description: Example not found
+  /comments/user/{user}:
+    get:
+      summary: Get all comments by a specific user
+      tags:
+        - Comments
+      parameters:
+        - name: user
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of comments
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Example not found
-                  appCode:
-                    type: string
-                    example: UNKNOWN_ERROR
-                  timestamp:
-                    type: string
-                    example: '2023-10-01T12:00:00.000Z'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+  /comments/publication/{publication}:
+    get:
+      summary: Get all comments by a specific publication
+      tags:
+        - Comments
+      parameters:
+        - name: publication
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+  /comments:
+    post:
+      summary: Create a new comment
+      tags:
+        - Comments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: Created comment
+  /publications:
+    post:
+      summary: Create a new publication
+      tags:
+        - Publications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publication'
+      responses:
+        '201':
+          description: Created publication
+  /publications/{id}:
+    get:
+      summary: Get a publication by ID
+      tags:
+        - Publications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Publication data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publication'
+    put:
+      summary: Update a publication by ID
+      tags:
+        - Publications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publication'
+      responses:
+        '200':
+          description: Updated publication
+    delete:
+      summary: Delete a publication by ID
+      tags:
+        - Publications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted
+  /testReaction:
+    get:
+      summary: Get all test reactions
+      tags:
+        - Reactions
+      responses:
+        '200':
+          description: List of test reactions
+  /comments/{id}/reactions:
+    get:
+      summary: Get all reactions for a specific comment
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of reactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+  /publications/{id}/reactions:
+    get:
+      summary: Get all reactions for a specific publication
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of reactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+  /user/{id}/unseen:
+    get:
+      summary: Get unseen reactions for a user
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of unseen reactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+  /comments/{id}/reaction:
+    post:
+      summary: Add a reaction to a comment
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reaction'
+      responses:
+        '201':
+          description: Reaction added
+  /publications/{id}/reaction:
+    post:
+      summary: Add a reaction to a publication
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the publication
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reaction'
+      responses:
+        '201':
+          description: Reaction added
+  /read/reaction/{id}:
+    put:
+      summary: Mark a reaction as read
+      tags:
+        - Reactions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the reaction
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reaction marked as read
 components:
   schemas:
-    Example:
+    Comment:
       type: object
       properties:
-        _id:
+        publicacion_id:
           type: string
-          example: '60c72b2f9b1d8f0d8d0b6f9e'
-        name:
+          description: ID of the related publication
+        usuario_id:
           type: string
-          example: Example Name
-        value:
-          type: number
-          example: 123
-      required:
-        - name
-        - value
-    NewExample:
+          description: ID of the user who made the comment
+        contenido_comentario:
+          type: string
+          description: Text of the comment
+        creado:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        modificado:
+          type: string
+          format: date-time
+          description: Last modification timestamp
+    Publication:
       type: object
       properties:
-        name:
+        usuario:
           type: string
-          example: Example Name
-        value:
-          type: number
-          example: 123
-      required:
-        - name
-        - value
+          description: ID of the user who created the publication
+        titulo:
+          type: string
+          description: Title of the publication
+        contenido:
+          type: string
+          description: Content of the publication
+        ubicacion:
+          type: string
+          enum:
+            - AFRICA
+            - AMERICA
+            - ASIA
+            - EUROPE
+            - OCEANIA
+          description: Geographic location of the publication
+        categoria:
+          type: string
+          enum:
+            - ADVENTURE
+            - CITY
+            - CULTURE
+            - NATURE
+            - RELAX
+          description: Category of the publication
+        imagenes:
+          type: array
+          items:
+            type: string
+            description: URL of the image
+        creado:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        modificado:
+          type: string
+          format: date-time
+          description: Last modification timestamp
+    Reaction:
+      type: object
+      properties:
+        usuario:
+          type: string
+          description: ID of the user who reacted
+        publicacion:
+          type: string
+          description: ID of the related publication (if applicable)
+        comentario:
+          type: string
+          description: ID of the related comment (if applicable)
+        reaccion:
+          type: string
+          enum:
+            - LIKE
+            - LOVE
+            - DISLIKE
+          description: Type of reaction
+        visto:
+          type: boolean
+          description: Whether the reaction has been marked as seen
+        creado:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        modificado:
+          type: string
+          format: date-time
+          description: Last modification timestamp

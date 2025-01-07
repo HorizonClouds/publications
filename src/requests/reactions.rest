@@ -1,0 +1,55 @@
+###
+
+POST http://localhost:3000/api/publications/6740858db0f666cc0d25f89e/reaction
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "reaccion": "LIKE"
+    
+}
+
+###
+
+POST http://localhost:3000/api/publications/6740858db0f666cc0d25f89e/reaction
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "reaccion": "LIKE"
+    
+}
+
+###
+
+POST http://localhost:3000/api/publications/6740858db0f666cc0d25f89e/reaction
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1c",
+    "reaccion": "LOVE"
+    
+}
+
+###
+
+POST http://localhost:3000/api/comments/6740858db0f666cc0d25f89e/reaction
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1c",
+    "reaccion": "DISLIKE"
+    
+}
+
+###
+
+PUT http://localhost:3000/api/read/reaction/6741b546f0d97c95b8a070d1
+Content-Type: application/json
+
+{
+    "visto": true
+    
+}
+
+###

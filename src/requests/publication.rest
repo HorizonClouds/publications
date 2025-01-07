@@ -1,0 +1,92 @@
+###
+
+POST http://localhost:3000/api/publications
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "titulo": "Mi primer viaje",
+    "contenido": "La Costa del Sol fue muy bonita.",
+    "ubicacion": "EUROPE",
+    "categoria": "RELAX",
+    "imagenes": [
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/1f/bc/f0/balcon-de-europa.jpg",
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/7e/03/e5/dsc-2307-largejpg.jpg"
+        ]
+}
+
+###
+
+POST http://localhost:3000/api/publications
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "titulo": "Nuestro segundo viaje",
+    "contenido": "Después de pedirnos matrimonio fuimos a Almería.",
+    "ubicacion": "EUROPE",
+    "categoria": "CITY",
+    "imagenes": [
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/01/47/b3/c6/moorish-wall-almeria.jpg"
+        ]
+}
+
+###
+
+POST http://localhost:3000/api/publications
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "titulo": "Día de ski",
+    "contenido": "Nunca habíamos estado en Sierra Nevada. ¡Qué frío!",
+    "ubicacion": "EUROPE",
+    "categoria": "ADVENTURE",
+    "imagenes": [
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/40/ab/a8/view-from-our-room.jpg"
+    ]
+}
+
+###
+
+POST http://localhost:3000/api/publications
+Content-Type: application/json
+
+{
+    "usuario": "65b2aec262e19efa29bc3b1e",
+    "titulo": "Ruta gastronómica",
+    "contenido": "Jabugo, Galaroza y Cortegana. Un viaje para el paladar.",
+    "ubicacion": "EUROPE",
+    "categoria": "RELAX",
+    "imagenes": [
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/24/0c/b6/caption.jpg",
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/8b/5f/93/caption.jpg",
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/24/0c/b7/caption.jpg",
+        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/c4/2e/a7/caption.jpg"
+    ]
+}
+
+###
+
+
+// -------------------------------------
+// UPDATE
+// -------------------------------------
+
+###
+
+PUT http://localhost:3000/api/publications/67412b3a119d870f78afc106
+Content-Type: application/json
+
+{
+    "categoria": "CULTURE"
+}
+
+// ------------------------------------
+// DELETE
+// ------------------------------------
+
+###
+
+DELETE http://localhost:3000/api/publications/67409feb24a4a70a594f8d53
+Content-Type: application/json
